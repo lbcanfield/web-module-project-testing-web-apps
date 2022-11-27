@@ -55,9 +55,27 @@ test('renders THREE error messages if user enters no values into any fields.', a
     })
 });
 
-// test('renders ONE error message if user enters a valid first name and last name but no email.', async () => {
+test('renders ONE error message if user enters a valid first name and last name but no email.', async () => {
+    //Arrange
+    render(<ContactForm />);
 
-// });
+    //Act
+    const firstNameInput = screen.queryByLabelText(/First Name*/i);
+    userEvent.type(firstNameInput, 'George');
+
+    const lastNameInput = screen.queryByLabelText(/Last Name*/i);
+    userEvent.type(lastNameInput, 'Washington');
+
+    const submitBtn = screen.getByRole('button');
+    userEvent.click(submitBtn);
+
+    // Assert 
+    await waitFor(() => {
+        const emailFeedback = screen.queryByText(/Error: email must be a valid email address/i);
+        expect(emailFeedback).toBeInTheDocument();
+    })
+
+});
 
 // test('renders "email must be a valid email address" if an invalid email is entered', async () => {
 
